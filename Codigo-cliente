@@ -1,7 +1,5 @@
 Codigo do cliente!
 
-
-
 package realcrud;
 
 import java.sql.Connection;
@@ -197,28 +195,9 @@ public class ClIenteda {
 		        }
 		        
 		       
-		        
-		        
-		        
-		        
-		        
-		        
-		        
+	        
 		        
 		    }
-		
-
-		
-		
-		 
-		
-		
-		
-		
-		
-		
-		
-		
 		
 		
 		
