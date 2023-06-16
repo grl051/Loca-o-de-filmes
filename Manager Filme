@@ -1,0 +1,196 @@
+Manager
+
+
+
+
+
+package realcrud;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Scanner;
+
+public class ManagerFilme {
+
+		    private static final String URL = "jdbc:mysql://localhost:3306/crud?user_root&password=";
+		    private static final String USUARIO = "root";
+		    private static final String SENHA = "";
+			private static Scanner scanner;
+
+			ConexaoDAO dao = new ConexaoDAO();
+			Connection conexao = ConexaoDAO.conectaDB();
+			
+			public static void main(String[] args) {
+				Scanner scanner = new Scanner(System.in);
+		        String opcao;
+
+		        do {
+		            System.out.println("===== MENU =====");
+		            System.out.println("1. Exibir Filmes");
+		            System.out.println("2. Adicionar Filmes");
+		            System.out.println("3. Editar Filme");
+		            System.out.println("4. Excluir Filme");
+		            System.out.println("0. Sair");
+		            System.out.print("Escolha uma opção: ");
+		            opcao = scanner.nextLine();
+
+		            switch (opcao) {
+		                case "1":
+		                    exibirFilme();
+		                    break;
+		                case "2":
+		                    adicionarFilme();
+		                    break;
+		                case "3":
+		                    editarCliente();
+		                    break;
+		                case "4":
+		                    excluirFilme();
+		                    break;
+		                case "0":
+		                    System.out.println("Encerrando o programa...");
+		                    break;
+		                default:
+		                    System.out.println("Opção inválida!");
+		                    break;
+		                     }
+		        } while (!opcao.equals("0"));
+
+		        scanner.close();
+		        }
+		            
+		        
+			private static void exibirFilme() {
+		        try (Connection connection = DriverManager.getConnection(URL, USUARIO, SENHA);
+		             Statement statement = connection.createStatement();
+		             ResultSet resultSet = statement.executeQuery("SELECT * FROM filme")) {
+
+		            System.out.println("===== Filmes =====");
+		            while (resultSet.next()) {
+		                Long idfilme = resultSet.getLong("idfilme");
+		                String nome = resultSet.getString("Nome");
+		                String diretor = resultSet.getString("Diretor");
+
+		                System.out.println("id : " + idfilme);
+		                System.out.println("Nome do filme: " + nome);
+		                System.out.println("");
+		                System.out.println("Diretor do filme: " + diretor);	                
+		                System.out.println("------------------------------");
+		            }
+		        } catch (SQLException e) {
+		            e.printStackTrace();
+		        }
+		    }
+			
+			private static void adicionarFilme() {
+			        try (Connection connection = DriverManager.getConnection(URL, USUARIO, SENHA);
+			             PreparedStatement preparedStatement = connection.prepareStatement(
+			                     "INSERT INTO filme (idfilme, Nome, Diretor) VALUES (?, ?, ?)")) {
+
+			            scanner = new Scanner(System.in);
+
+			            System.out.print("Insira o id do filme:  ");
+			            Long idfilme = scanner.nextLong();
+
+			            System.out.print("insira o filme: ");
+			            System.out.println("");
+			            String nome = scanner.next();
+			    
+			           
+			            System.out.print("Insira o Diretor: ");
+			            System.out.println("");		           
+			            String diretor = scanner.next();
+			           
+			            
+
+			            preparedStatement.setLong(1, idfilme);
+			            preparedStatement.setString(2, nome );
+			            preparedStatement.setString(3, diretor);
+
+			            int linhasAfetadas = preparedStatement.executeUpdate();
+			            if (linhasAfetadas > 0) {
+			                System.out.println("Filme adicionado com sucesso!");
+			            } else {
+			                System.out.println("Falha ao adicionar Filme.");
+			            }
+
+			        } catch (SQLException e) {
+			            e.printStackTrace();
+			        }
+			    }
+			 private static void editarCliente() {
+			        try (Connection connection = DriverManager.getConnection(URL, USUARIO, SENHA);
+			             PreparedStatement preparedStatement = connection.prepareStatement(
+			                     "UPDATE cliente SET Login = ? WHERE CPF = ? ")) {
+
+			            Scanner scanner = new Scanner(System.in);
+
+			            System.out.print("Digite o CPF do cliente que deseja editar: ");
+			            String CPF = scanner.next();    
+
+			            System.out.print("Digite o novo login do cliente: ");
+			            String login = scanner.next();
+
+			            preparedStatement.setString(2, String.valueOf(CPF));
+			            
+			            preparedStatement.setString(1, login);
+			            
+			        
+			            int linhasAfetadas = preparedStatement.executeUpdate();
+			            if (linhasAfetadas > 0) {
+			                System.out.println("Cliente atualizado com sucesso!");
+			            } else {
+			                System.out.println("Falha ao atualizar Cliente. Verifique CPF informado.");
+			            }
+
+			        } catch (SQLException e) {
+			            e.printStackTrace();
+			        }
+			    }
+			 private static void excluirFilme() {
+			        try (Connection connection = DriverManager.getConnection(URL, USUARIO, SENHA);
+			             PreparedStatement preparedStatement = connection.prepareStatement(
+			                     "DELETE FROM filme WHERE idfilme = ?")) {
+
+			            Scanner scanner = new Scanner(System.in);
+
+			            System.out.print("Digite o CPF do cliente que deseja excluir: ");
+			            Long idfilme = scanner.nextLong();
+
+			            preparedStatement.setLong(1, idfilme);
+
+			            int linhasAfetadas = preparedStatement.executeUpdate();
+			            if (linhasAfetadas > 0) {
+			                System.out.println("Cliente excluído com sucesso!");
+			            } else {
+			                System.out.println("Falha ao excluir cliente. Verifique o CPF informado.");
+			            }
+
+			        } catch (SQLException e) {
+			            e.printStackTrace();
+			        }
+			    }
+			
+
+			public static void formaDePagamento() {
+				
+				
+			}
+			
+			 
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+	}
+
