@@ -1,0 +1,70 @@
+Locadora de filmes MYsql ! ! !
+
+
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
+
+-- -----------------------------------------------------
+-- Schema crud
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema crud
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `crud` DEFAULT CHARACTER SET utf8 ;
+USE `crud` ;
+
+-- -----------------------------------------------------
+-- Table `crud`.`CLIENTE`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `crud`.`CLIENTE` (
+  `CPF` CHAR(14) NOT NULL,
+  `Login` VARCHAR(100) NULL,
+  `forma_de_pagamento` VARCHAR(45) NULL,
+  PRIMARY KEY (`CPF`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `crud`.`Filme`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `crud`.`Filme` (
+  `idFilme` INT NOT NULL,
+  `Diretor` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`idFilme`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `crud`.`ALUGA`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `crud`.`ALUGA` (
+  `CLIENTE_CPF` CHAR(14) NOT NULL,
+  `Filme_idFilme` INT NOT NULL,
+  `Data_Devoluçao` DATE NOT NULL,
+  PRIMARY KEY (`CLIENTE_CPF`, `Filme_idFilme`),
+  INDEX `fk_CLIENTE_has_Filme_Filme1_idx` (`Filme_idFilme` ASC),
+  INDEX `fk_CLIENTE_has_Filme_CLIENTE_idx` (`CLIENTE_CPF` ASC),
+  CONSTRAINT `fk_CLIENTE_has_Filme_CLIENTE`
+    FOREIGN KEY (`CLIENTE_CPF`)
+    REFERENCES `crud`.`CLIENTE` (`CPF`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_CLIENTE_has_Filme_Filme1`
+    FOREIGN KEY (`Filme_idFilme`)
+    REFERENCES `crud`.`Filme` (`idFilme`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+
+INSERT INTO cliente(CPF) VALUES('011.907.555-56');
+select * from cliente;
+UPDATE cliente SET Login = 'Gabriel0514@'  WHERE CPF = '091.522.105-12' ;
